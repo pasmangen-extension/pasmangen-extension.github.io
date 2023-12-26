@@ -1,11 +1,11 @@
 {
-  "description": "PMG - Password Manager Generator - The easy way to manage your passwords",
+  "description": "PMG - Password Manager Generator",
   "manifest_version": 2,
   "name": "PasManGen",
-  "version": "1.0",
-  "homepage_url": "https://pasmangen.github.io/",
+  "version": "0.9.0",
+  "homepage_url": "https://pasmangen-extension.github.io/",
   "icons": {
-    "48": "icons/pmg-logo.png"
+    "512": "icons/pmg-logo.png"
   },
   "permissions": [
     "tabs",
