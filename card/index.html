@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../icons/pmg-logo.png" />
+    <title>PMG - Password Manager Generator</title>
+    <style>
+        body {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            margin: 2rem;
+            font-family: Roboto, sans-serif;
+        }
+
+        section {
+            background-color: rgb(249, 249, 249);
+            border: 1px solid rgb(204, 204, 204);
+            padding: 8px;
+            border-radius: 10px;
+        }
+
+        h2, h3 {
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            width: 28rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        th, td.cel {
+            background:rgb(204, 204, 204);
+        }
+        
+        td {
+            text-align: center;
+            padding: 0.5em;
+            background: white;
+            border: 1px solid rgb(204, 204, 204);
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <section id="codesCardSeed">
+        <h2>Password Manager Generator</h2>
+        <h3>Generate Codes Card</h3>
+        <label for="birthplace">Birthplace:</label>
+        <input id="birthplace" type="text" placeholder="Eg: Madrid" />
+        <label for="childhoodFriend">Best Childhood Friend:</label>
+        <input id="childhoodFriend" type="text" placeholder="Eg: Jorge" />
+        <label for="schoolName">Primary School Name:</label>
+        <input id="schoolName" type="text" placeholder="Eg: Cervantes" />
+        <label for="cardName">Codes Card Name:</label>
+        <input id="cardName" type="text" placeholder="Eg: Level 1" />
+        <br/>
+        <a href="../help/" style="float: right;">Help</a>
+        <button onclick="generateCodesCard()">Generate Codes Card</button>
+    </section>
+
+    <section id="codesCardTable" style="display: none;"></section>
+
+    <script src="../lib/jsSHA-3.3.1/sha512.js" defer></script>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/card.js" defer></script>
+
+</body>
+
+</html>

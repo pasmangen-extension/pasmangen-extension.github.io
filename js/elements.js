@@ -1,11 +1,10 @@
 const GENERATED_PASSWORD_LENGTH = 24; // max 88
 const GENERATED_USERNAME_LENGTH = 12; // max 88
-const NUMBER_CODES_CARD_CELLS = 40;
 const LABEL_WIDTH = '19rem';
 const INPUT_WIDTH = '28rem';
 const MIN_INPUT_WIDTH = '9rem';
 const NUMBER_INPUT_WIDTH = '3rem';
-const MARGIN = '0.7rem';
+const MARGIN = '0.5rem';
 
 function getParentDomainsChain() {
 
@@ -21,16 +20,32 @@ function getParentDomainsChain() {
     return parentDomains;
 }
 
-function addTitle(document, parentElement) {
+function addTitle(parentElement) {
 
     const title = document.createElement('h2');
     title.innerHTML = 'Password Manager Generator';
     title.style.textAlign = 'center';
     
     parentElement.appendChild(title);
+
+    const subtitle = document.createElement('h3');
+    subtitle.innerHTML = 'Generate Password';
+    subtitle.style.textAlign = 'center';
+    
+    parentElement.appendChild(subtitle);
 }
 
-function addSeparationLine(document, parentElement) {
+function addLink(parentElement, href, text) {
+    
+    const link = document.createElement('a');
+    link.href = href;
+    link.text = text;
+    link.style.float = 'right';
+
+    parentElement.appendChild(link);
+}
+
+function addSeparationLine(parentElement) {
 
     const separationLine = document.createElement('hr');
     separationLine.style.border = '1px solid #ccc';
@@ -45,7 +60,7 @@ function addBR(parentElement) {
     parentElement.appendChild(document.createElement('br'));
 }
 
-function createPopover(document) {
+function createPopover() {
 
     const popover = document.createElement('div');
     popover.id = 'popover'
@@ -61,7 +76,7 @@ function createPopover(document) {
 }
 
 
-function createLabel(document, parentElement, htmlFor, textContent) {
+function createLabel(parentElement, htmlFor, textContent) {
 
     const label = document.createElement('Label');
     label.htmlFor = htmlFor;
@@ -69,6 +84,7 @@ function createLabel(document, parentElement, htmlFor, textContent) {
     label.style.minWidth = LABEL_WIDTH;
     label.style.display = 'inline-block';
     label.style.cursor = 'pointer';
+    label.style.marginBottom = MARGIN;
     label.textContent = textContent;
     
     parentElement.appendChild(label);
@@ -76,7 +92,7 @@ function createLabel(document, parentElement, htmlFor, textContent) {
     return label;
 }
 
-function createInputText(document, parentElement, id, placeholder, value, readOnly) {
+function createInputText(parentElement, id, placeholder, value, readOnly) {
 
     const input = document.createElement('input');
     input.id = id;
@@ -99,7 +115,7 @@ function createInputText(document, parentElement, id, placeholder, value, readOn
     return input;
 }
 
-function createInputNumber(document, parentElement, id, value) {
+function createInputNumber(parentElement, id, value) {
 
     const input = document.createElement('input');
     input.id = id;
@@ -114,7 +130,7 @@ function createInputNumber(document, parentElement, id, value) {
     return input;
 }
 
-function createCloseButton(document, parentElement, isIndex) {
+function createCloseButton(parentElement, isIndex) {
 
     if (isIndex) {
         return null;
@@ -131,7 +147,7 @@ function createCloseButton(document, parentElement, isIndex) {
     return closeButton;
 }
 
-function createCopyButton(document, parentElement) {
+function createCopyButton(parentElement) {
 
     const copyButton = document.createElement('button');
     copyButton.innerHTML = '&#9112;';
@@ -143,13 +159,13 @@ function createCopyButton(document, parentElement) {
     return copyButton;
 }
 
-function createDomainInput(document, parentElement, isIndex, value) {
+function createDomainInput(parentElement, isIndex, value) {
 
-    createLabel(document, parentElement, 'domainInput', 'Domain: ');
+    createLabel(parentElement, 'domainInput', 'Domain: ');
     addBR(parentElement);
 
     if (isIndex) {
-        return createInputText(document, parentElement, 'domainInput', 'Domain...');
+        return createInputText(parentElement, 'domainInput', 'Domain...');
     }
 
     const domainInput = document.createElement('select');
@@ -175,9 +191,9 @@ function createDomainInput(document, parentElement, isIndex, value) {
     return domainInput;
 }
 
-function createUserNameInput(document, parentElement, userNameField, value) {
+function createUserNameInput(parentElement, userNameField, value) {
 
-    createLabel(document, parentElement, 'userNameInput', 'User name: ');
+    createLabel(parentElement, 'userNameInput', 'User name: ');
     addBR(parentElement);
 
     let userName = userNameField ? userNameField.value : null;
@@ -186,12 +202,12 @@ function createUserNameInput(document, parentElement, userNameField, value) {
         userName = value;
     }
 
-    return createInputText(document, parentElement, 'userNameInput', 'User name...', userName);
+    return createInputText(parentElement, 'userNameInput', 'User name...', userName);
 }
 
-function createPasswordInput(document, parentElement, label) {
+function createPasswordInput(parentElement, label) {
 
-    createLabel(document, parentElement, label + 'PasswordInput', label + ' password: ');
+    createLabel(parentElement, label + 'PasswordInput', label + ' password: ');
     addBR(parentElement);
 
     const passwordContainer = document.createElement('div');
@@ -227,7 +243,7 @@ function createPasswordInput(document, parentElement, label) {
     return passwordInput;
 }
 
-function createOptionsContainer(document, parentElement, opened) {
+function createOptionsContainer(parentElement, opened) {
 
     const optionsButton = document.createElement('button');
     optionsButton.style.cursor = 'pointer';
@@ -265,20 +281,20 @@ function createOptionsContainer(document, parentElement, opened) {
     return optionsContainer;
 }
 
-function createGeneratedPasswordLengthInput(document, parentElement, generatedPasswordLength) {
+function createGeneratedPasswordLengthInput(parentElement, generatedPasswordLength) {
 
-    createLabel(document, parentElement, 'generatedPasswordLengthInput', 'Generated passord length: ');
+    createLabel(parentElement, 'generatedPasswordLengthInput', 'Generated passord length: ');
 
     if (!generatedPasswordLength) {
         generatedPasswordLength = GENERATED_PASSWORD_LENGTH;
     }
 
-    return createInputNumber(document, parentElement, 'generatedPasswordLengthInput', generatedPasswordLength);
+    return createInputNumber(parentElement, 'generatedPasswordLengthInput', generatedPasswordLength);
 }
 
-function createChekBox(document, parentElement, id, label, checked) {
+function createChekBox(parentElement, id, label, checked) {
 
-    createLabel(document, parentElement, id, label);
+    createLabel(parentElement, id, label);
 
     const checkBox = document.createElement('input');
     checkBox.id = id;
@@ -293,61 +309,49 @@ function createChekBox(document, parentElement, id, label, checked) {
     return checkBox;
 }
 
-function createPasswordChekBox(document, parentElement, checkBoxName, checked) {
+function createPasswordChekBox(parentElement, checkBoxName, checked) {
 
     if (!checked) {
         checked = true;
     }
 
-    return createChekBox(document, parentElement, 
-        checkBoxName + 'CheckBox', checkBoxName + ' characters: ', checked);
+    return createChekBox(parentElement, checkBoxName + 'CheckBox', checkBoxName + ' characters: ', checked);
 }
 
-function createCodesCardLabel(document, parentElement, codesCardCellLabel) {
+function createCodesCardLabel(parentElement, codesCardCellLabel) {
 
-    return createLabel(document, parentElement, 'codesCardInput', codesCardCellLabel);
+    return createLabel(parentElement, 'codesCardInput', codesCardCellLabel);
 }
 
-function createCodesCardInput(document, parentElement) {
+function createCodesCardInput(parentElement) {
 
-    const input = createInputText(document, parentElement, 'codesCardInput', 'Code of Card Cell...');
+    const input = createInputText(parentElement, 'codesCardInput', 'Code of Card Cell...');
     input.style.width = MIN_INPUT_WIDTH;
     return input;
 }
 
-function createCodesCardLengthInput(document, parentElement, numberCodesCardCells) {
-
-    createLabel(document, parentElement, 'codesCardLengthInput', 'Codes card length: ');
-
-    if (!numberCodesCardCells) {
-        numberCodesCardCells = NUMBER_CODES_CARD_CELLS;
-    }
-
-    return createInputNumber(document, parentElement, 'codesCardLengthInput', numberCodesCardCells);
-}
-
-function createGeneratedUserNameChekBox(document, parentElement, checked) {
+function createGeneratedUserNameChekBox(parentElement, checked) {
 
     if (!checked) {
         checked = false;
     }
 
-    return createChekBox(document, parentElement,
+    return createChekBox(parentElement,
         'generatedUserNameCheckBox', 'Generated user name:', checked);
 }
 
-function createGeneratedUserNameLengthInput(document, parentElement, generatedUserNameLength) {
+function createGeneratedUserNameLengthInput(parentElement, generatedUserNameLength) {
 
-    createLabel(document, parentElement, 'generatedUserNameLengthInput', 'Generated user name length: ');
+    createLabel(parentElement, 'generatedUserNameLengthInput', 'Generated user name length: ');
 
     if (!generatedUserNameLength) {
         generatedUserNameLength = GENERATED_USERNAME_LENGTH;
     }
 
-    return createInputNumber(document, parentElement, 'generatedUserNameLengthInput', generatedUserNameLength);
+    return createInputNumber(parentElement, 'generatedUserNameLengthInput', generatedUserNameLength);
 }
 
-function createGeneratedUserNameInput(document, parentElement) {
+function createGeneratedUserNameInput(parentElement) {
 
-    return createInputText(document, parentElement, 'generatedUserNameInput', 'Generated user name...', '', true);
+    return createInputText(parentElement, 'generatedUserNameInput', 'Generated user name...', '', true);
 }

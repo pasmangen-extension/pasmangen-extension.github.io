@@ -1,3 +1,5 @@
+const NUMBER_CODES_CARD_CELLS = 40;
+
 function generateHashFromText(text) {
 
     const shaobject = new jsSHA('SHA-512', 'TEXT', { encoding: 'UTF8' });
@@ -101,7 +103,7 @@ function normalizePassword(password, passwordSeed) {
     return newPassword;
 }
 
-function generateCodesCardCell(domain, userName, numberCodesCardCells) {
+function generateCodesCardCell(domain, userName) {
 
     const text = '' + domain.toLowerCase() + userName.toLowerCase();
 
@@ -109,7 +111,7 @@ function generateCodesCardCell(domain, userName, numberCodesCardCells) {
     for (var i = 0; i < text.length; i++) {
         sumCharCode += text.charCodeAt(i);
     }
-    return sumCharCode % numberCodesCardCells;
+    return sumCharCode % NUMBER_CODES_CARD_CELLS;
 }
 
 function generateCodesCardCellLabel(domain, userName, numberCodesCardCells) {
