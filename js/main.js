@@ -117,28 +117,29 @@ function generateCodesCardCell(domain, userName) {
 function generateCodesCardCellLabel(domain, userName, numberCodesCardCells) {
 
     const codesCardCell = generateCodesCardCell(domain, userName, numberCodesCardCells);
-    return 'Code of card cell [' + codesCardCell + ']:';
+    return 'Code of card cell [' + codesCardCell + ']';
 }
 
 function generateUserNameFromSeeds(domainSeed, userNameSeed, generatedUserNameLength) {
 
     const data = domainSeed.toLowerCase() + userNameSeed.toLowerCase();
-    const hash = generateHashFromText(data);
+    const hash = (domainSeed ? domainSeed + '-' : '') +
+        (userNameSeed ? userNameSeed + '-' : '') +
+        generateHashFromText(data);
 
     return normalizeUserName(hash, generatedUserNameLength);
 }
 
 function normalizeUserName(hash, generatedUserNameLength) {
 
-    let userName = hash.replace(/[^a-zA-Z0-9]/g, function () {
+    let userName = hash.replace(/[^a-zA-Z0-9-]/g, function () {
         return '';
     });
 
-    userName = 'p' + userName.toLowerCase();
+    userName = userName.toLowerCase();
 
     return userName.slice(0, generatedUserNameLength);
 }
-
 
 function getObjectFromLocalStorage(objectName) {
 

@@ -1,8 +1,7 @@
-const GENERATED_PASSWORD_LENGTH = 24; // max 88
-const GENERATED_USERNAME_LENGTH = 12; // max 88
-const LABEL_WIDTH = '19rem';
+const GENERATED_PASSWORD_LENGTH = 32; // max 88
+const GENERATED_USERNAME_LENGTH = 32; // max 88
+const LABEL_WIDTH = '17.5rem';
 const INPUT_WIDTH = '28rem';
-const MIN_INPUT_WIDTH = '9rem';
 const NUMBER_INPUT_WIDTH = '3rem';
 const MARGIN = '0.5rem';
 
@@ -25,18 +24,18 @@ function addTitle(parentElement) {
     const title = document.createElement('h2');
     title.innerHTML = 'Password Manager Generator';
     title.style.textAlign = 'center';
-    
+
     parentElement.appendChild(title);
 
     const subtitle = document.createElement('h3');
     subtitle.innerHTML = 'Generate Password';
     subtitle.style.textAlign = 'center';
-    
+
     parentElement.appendChild(subtitle);
 }
 
 function addLink(parentElement, href, text) {
-    
+
     const link = document.createElement('a');
     link.href = href;
     link.text = text;
@@ -51,12 +50,12 @@ function addSeparationLine(parentElement) {
     separationLine.style.border = '1px solid #ccc';
     separationLine.style.width = INPUT_WIDTH;
     separationLine.style.marginBottom = MARGIN;
-    
+
     parentElement.appendChild(separationLine);
 }
 
 function addBR(parentElement) {
-    
+
     parentElement.appendChild(document.createElement('br'));
 }
 
@@ -71,7 +70,7 @@ function createPopover() {
     popover.style.borderRadius = '10px';
     popover.style.zIndex = '9999';
     popover.style.fontFamily = 'Roboto, sans-serif';
-    
+
     return popover;
 }
 
@@ -86,9 +85,9 @@ function createLabel(parentElement, htmlFor, textContent) {
     label.style.cursor = 'pointer';
     label.style.marginBottom = MARGIN;
     label.textContent = textContent;
-    
+
     parentElement.appendChild(label);
-    
+
     return label;
 }
 
@@ -111,7 +110,7 @@ function createInputText(parentElement, id, placeholder, value, readOnly) {
 
     parentElement.appendChild(input);
     addBR(parentElement);
-    
+
     return input;
 }
 
@@ -205,22 +204,31 @@ function createUserNameInput(parentElement, userNameField, value) {
     return createInputText(parentElement, 'userNameInput', 'User name...', userName);
 }
 
-function createPasswordInput(parentElement, label) {
+function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
 
-    createLabel(parentElement, label + 'PasswordInput', label + ' password: ');
-    addBR(parentElement);
+    if (needLabel) {
+        createLabel(parentElement, id, label + ': ');
+        addBR(parentElement);
+    }
 
     const passwordContainer = document.createElement('div');
     passwordContainer.style.position = 'relative';
     passwordContainer.style.width = INPUT_WIDTH;
 
     const passwordInput = document.createElement('input');
-    passwordInput.id = label + 'PasswordInput';
+    passwordInput.id = id;
     passwordInput.type = 'password';
     passwordInput.style.width = INPUT_WIDTH;
     passwordInput.style.marginBottom = MARGIN;
-    passwordInput.placeholder = label + ' password...';
+    passwordInput.placeholder = label + '...';
     passwordContainer.appendChild(passwordInput);
+
+    if (readOnly) {
+        passwordInput.readOnly = true;
+    } else {
+        VKI_attach(passwordInput);
+        passwordInput.VKI_imageURI = '';
+    }
 
     const passwordToggle = document.createElement('span');
     passwordToggle.innerHTML = '&#128274;';
@@ -263,7 +271,7 @@ function createOptionsContainer(parentElement, opened) {
         optionsContainer.style.display = 'none';
         optionsContainer.dataset.opened = false;
     }
-    
+
     parentElement.appendChild(optionsContainer);
 
     optionsButton.addEventListener('click', function () {
@@ -283,7 +291,7 @@ function createOptionsContainer(parentElement, opened) {
 
 function createGeneratedPasswordLengthInput(parentElement, generatedPasswordLength) {
 
-    createLabel(parentElement, 'generatedPasswordLengthInput', 'Generated passord length: ');
+    createLabel(parentElement, 'generatedPasswordLengthInput', 'Generated password length: ');
 
     if (!generatedPasswordLength) {
         generatedPasswordLength = GENERATED_PASSWORD_LENGTH;
@@ -320,14 +328,9 @@ function createPasswordChekBox(parentElement, checkBoxName, checked) {
 
 function createCodesCardLabel(parentElement, codesCardCellLabel) {
 
-    return createLabel(parentElement, 'codesCardInput', codesCardCellLabel);
-}
-
-function createCodesCardInput(parentElement) {
-
-    const input = createInputText(parentElement, 'codesCardInput', 'Code of Card Cell...');
-    input.style.width = MIN_INPUT_WIDTH;
-    return input;
+    label = createLabel(parentElement, 'codesCardInput', codesCardCellLabel + ':');
+    label.style.minWidth = '';
+    return label;
 }
 
 function createGeneratedUserNameChekBox(parentElement, checked) {
@@ -337,7 +340,7 @@ function createGeneratedUserNameChekBox(parentElement, checked) {
     }
 
     return createChekBox(parentElement,
-        'generatedUserNameCheckBox', 'Generated user name:', checked);
+        'generatedUserNameCheckBox', 'Generate user name:', checked);
 }
 
 function createGeneratedUserNameLengthInput(parentElement, generatedUserNameLength) {

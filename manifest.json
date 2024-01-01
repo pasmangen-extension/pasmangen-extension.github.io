@@ -2,7 +2,7 @@
   "description": "PMG - Password Manager Generator",
   "manifest_version": 2,
   "name": "PasManGen",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "homepage_url": "https://pasmangen-extension.github.io/",
   "icons": {
     "512": "icons/pmg-logo.png"
@@ -21,7 +21,11 @@
         "js/extension.js",
         "js/main.js",
         "js/popover.js",
-        "lib/jsSHA-3.3.1/sha512.js"
+        "lib/jsSHA-3.3.1/sha512.js",
+        "lib/virtual-keyboard-1.53/keyboard.js"
+      ],
+      "css": [
+        "lib/virtual-keyboard-1.53/keyboard.css"
       ]
     }
   ]

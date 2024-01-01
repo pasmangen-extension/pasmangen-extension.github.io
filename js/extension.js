@@ -31,8 +31,9 @@ function addFocusListenerToPasswordField(field) {
 
         const passwordFields = field.querySelectorAll('input[type="password"]');
         passwordFields.forEach(field => {
-            if ((field.id != 'MasterPasswordInput') &&
-                (field.id != 'GeneratedPasswordInput')) {
+            if ((field.id != 'masterPasswordInput') &&
+                (field.id != 'generatedPasswordInput') &&
+                (field.id != 'codesCardInput')) {
                 field.addEventListener('focus', handleFocusOnPasswordField);
             }
         });

@@ -25,10 +25,10 @@ function updateFields(updateFieldsObject) {
 
     const codesCardCellLabel = generateCodesCardCellLabel(
         updateFieldsObject.domainInput.value,
-        updateFieldsObject.userNameInput.value,
-        updateFieldsObject.codesCardLengthInput.value);
+        updateFieldsObject.userNameInput.value);
 
     updateFieldsObject.codesCardLabel.textContent = codesCardCellLabel;
+    updateFieldsObject.codesCardInput.placeholder = codesCardCellLabel + '...';
 
     if (updateFieldsObject.generatedUserNameCheckBox.checked) {
 
@@ -69,8 +69,6 @@ function closePopover(popover, closeObject) {
 
     popover.style.display = 'none';
 
-    console.log(closeObject);
-
     setObjectToLocalStorage(window.location.hostname, closeObject);
 }
 
@@ -103,11 +101,13 @@ function initializePopover(passwordField) {
         localStorage ? localStorage.domainInput : null);
     const userNameInput = createUserNameInput(popover, userNameField,
         localStorage ? localStorage.userNameInput : null);
-    const masterPasswordInput = createPasswordInput(popover, 'Master');
+    const masterPasswordInput = createPasswordInput(popover, 
+        'masterPasswordInput', 'Master password', false, true);
     const generatedPasswordCopyButton = createCopyButton(popover);
-    const generatedPasswordInput = createPasswordInput(popover, 'Generated');
+    const generatedPasswordInput = createPasswordInput(popover, 
+        'generatedPasswordInput', 'Generated password', true, true);
 
-    addLink(popover, './help/', 'Help');
+    addLink(popover, 'https://pasmangen-extension.github.io/help/', 'Help');
     const optionsContainer = createOptionsContainer(popover,
         localStorage ? localStorage.optionsContainer : null);
 
@@ -115,9 +115,9 @@ function initializePopover(passwordField) {
 
     const generatedPasswordLengthInput = createGeneratedPasswordLengthInput(optionsContainer,
         localStorage ? localStorage.passwordLengthInput : null);
-    const upperCheckBox = createPasswordChekBox(optionsContainer, 'Upper',
+    const upperCheckBox = createPasswordChekBox(optionsContainer, 'Uppercase',
         localStorage ? localStorage.upperCheckBox : null);
-    const lowerCheckBox = createPasswordChekBox(optionsContainer, 'Lower',
+    const lowerCheckBox = createPasswordChekBox(optionsContainer, 'Lowercase',
         localStorage ? localStorage.lowerCheckBox : null);
     const specialCheckBox = createPasswordChekBox(optionsContainer, 'Special',
         localStorage ? localStorage.specialCheckBox : null);
@@ -128,9 +128,10 @@ function initializePopover(passwordField) {
 
     const codesCardCellLabel = generateCodesCardCellLabel(domainInput.value, userNameInput.value);
     const codesCardLabel = createCodesCardLabel(optionsContainer, codesCardCellLabel);
-    const codesCardInput = createCodesCardInput(optionsContainer);
-    addLink(optionsContainer, './card/', 'Generate Codes Card');
+    addLink(optionsContainer, 'https://pasmangen-extension.github.io/card/', 'Generate codes card');
     addBR(optionsContainer);
+    const codesCardInput = createPasswordInput(optionsContainer, 
+        'codesCardInput', codesCardCellLabel, false, false);
 
     addSeparationLine(optionsContainer);
 
