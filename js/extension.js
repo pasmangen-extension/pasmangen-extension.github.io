@@ -33,7 +33,8 @@ function addFocusListenerToPasswordField(field) {
         passwordFields.forEach(field => {
             if ((field.id != 'masterPasswordInput') &&
                 (field.id != 'generatedPasswordInput') &&
-                (field.id != 'codesCardInput')) {
+                (field.id != 'codesCardInput') &&
+                (field.id != 'generatedUserNameInput')) {
                 field.addEventListener('focus', handleFocusOnPasswordField);
             }
         });

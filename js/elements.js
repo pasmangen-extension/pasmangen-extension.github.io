@@ -2,8 +2,14 @@ const GENERATED_PASSWORD_LENGTH = 32; // max 88
 const GENERATED_USERNAME_LENGTH = 32; // max 88
 const LABEL_WIDTH = '17.5rem';
 const INPUT_WIDTH = '28rem';
+const PASSWORD_INPUT_WIDTH = '25rem';
+const VIRTUAL_KEYBOARD_MARGIN = '-3.5rem';
 const NUMBER_INPUT_WIDTH = '3rem';
 const MARGIN = '0.5rem';
+
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
 
 function getParentDomainsChain() {
 
@@ -152,6 +158,8 @@ function createCopyButton(parentElement) {
     copyButton.innerHTML = '&#9112;';
     copyButton.style.cursor = 'pointer';
     copyButton.style.float = 'right';
+    copyButton.style.marginTop = '1.8rem';
+    //copyButton.style.marginRight = '0.5rem';
 
     parentElement.appendChild(copyButton);
 
@@ -213,22 +221,15 @@ function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
 
     const passwordContainer = document.createElement('div');
     passwordContainer.style.position = 'relative';
-    passwordContainer.style.width = INPUT_WIDTH;
+    passwordContainer.style.width = PASSWORD_INPUT_WIDTH;
 
     const passwordInput = document.createElement('input');
     passwordInput.id = id;
     passwordInput.type = 'password';
-    passwordInput.style.width = INPUT_WIDTH;
+    passwordInput.style.width = PASSWORD_INPUT_WIDTH;
     passwordInput.style.marginBottom = MARGIN;
     passwordInput.placeholder = label + '...';
     passwordContainer.appendChild(passwordInput);
-
-    if (readOnly) {
-        passwordInput.readOnly = true;
-    } else {
-        VKI_attach(passwordInput);
-        passwordInput.VKI_imageURI = '';
-    }
 
     const passwordToggle = document.createElement('span');
     passwordToggle.innerHTML = '&#128274;';
@@ -245,6 +246,20 @@ function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
         }
     });
     passwordContainer.appendChild(passwordToggle);
+
+    if (readOnly) {
+        passwordInput.readOnly = true;
+    } else {
+        if (!isMobileDevice()) {
+            const styleElement = document.createElement('style');
+            const styleContent = '.keyboardInputInitiator {' +
+                ' float: right;' +
+                ' margin-right: ' + VIRTUAL_KEYBOARD_MARGIN + ' !important;}'
+            styleElement.textContent = styleContent;
+            document.head.appendChild(styleElement);
+            VKI_attach(passwordInput);
+        }
+    }
 
     parentElement.appendChild(passwordContainer);
 
@@ -356,5 +371,7 @@ function createGeneratedUserNameLengthInput(parentElement, generatedUserNameLeng
 
 function createGeneratedUserNameInput(parentElement) {
 
-    return createInputText(parentElement, 'generatedUserNameInput', 'Generated user name...', '', true);
+    const input = createInputText(parentElement, 'generatedUserNameInput', 'Generated user name...', '', true);
+    input.style.width = PASSWORD_INPUT_WIDTH;
+    return input;
 }

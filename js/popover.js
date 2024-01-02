@@ -27,7 +27,7 @@ function updateFields(updateFieldsObject) {
         updateFieldsObject.domainInput.value,
         updateFieldsObject.userNameInput.value);
 
-    updateFieldsObject.codesCardLabel.textContent = codesCardCellLabel;
+    updateFieldsObject.codesCardLabel.textContent = codesCardCellLabel + ':';
     updateFieldsObject.codesCardInput.placeholder = codesCardCellLabel + '...';
 
     if (updateFieldsObject.generatedUserNameCheckBox.checked) {
@@ -101,10 +101,10 @@ function initializePopover(passwordField) {
         localStorage ? localStorage.domainInput : null);
     const userNameInput = createUserNameInput(popover, userNameField,
         localStorage ? localStorage.userNameInput : null);
-    const masterPasswordInput = createPasswordInput(popover, 
+    const masterPasswordInput = createPasswordInput(popover,
         'masterPasswordInput', 'Master password', false, true);
     const generatedPasswordCopyButton = createCopyButton(popover);
-    const generatedPasswordInput = createPasswordInput(popover, 
+    const generatedPasswordInput = createPasswordInput(popover,
         'generatedPasswordInput', 'Generated password', true, true);
 
     addLink(popover, 'https://pasmangen-extension.github.io/help/', 'Help');
@@ -130,7 +130,7 @@ function initializePopover(passwordField) {
     const codesCardLabel = createCodesCardLabel(optionsContainer, codesCardCellLabel);
     addLink(optionsContainer, 'https://pasmangen-extension.github.io/card/', 'Generate codes card');
     addBR(optionsContainer);
-    const codesCardInput = createPasswordInput(optionsContainer, 
+    const codesCardInput = createPasswordInput(optionsContainer,
         'codesCardInput', codesCardCellLabel, false, false);
 
     addSeparationLine(optionsContainer);
@@ -176,7 +176,7 @@ function initializePopover(passwordField) {
                 'generatedUserNameCheckBox': generatedUserNameCheckBox.checked,
                 'generatedUserNameLengthInput': generatedUserNameLengthInput.value,
             };
-            
+
             closePopover(popover, closeObject)
         });
     }

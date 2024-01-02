@@ -8,49 +8,67 @@ function getValueOf(id) {
 
 function getHash() {
 
-    const birthplace      = getValueOf('birthplace');
+    const birthplace = getValueOf('birthplace');
     const childhoodFriend = getValueOf('childhoodFriend');
-    const schoolName      = getValueOf('schoolName');
-    const cardName        = getValueOf('cardName');
-    
+    const schoolName = getValueOf('schoolName');
+    const cardName = getValueOf('cardName');
+
     const data1 = birthplace + childhoodFriend + schoolName + cardName;
     const data2 = schoolName + cardName + birthplace + childhoodFriend;
-    const hash  = generateHashFromText(data1) + generateHashFromText(data2);
-    
+    const hash = generateHashFromText(data1) + generateHashFromText(data2);
+
     return hash;
-};
+}
 
 function generateCodesCard() {
-    
+
     const cardName = getValueOf('cardName') || 'Password Manager Generator';
 
-    let codesCard = '';
-    codesCard += '<table>';
+    const table = document.createElement('table');
 
-    codesCard += '<th colspan="'+(NUM_COLUMNS*2)+'">'+cardName.toUpperCase()+'</th>';
-    
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    const headerCell = document.createElement('th');
+    headerCell.colSpan = NUM_COLUMNS * 2
+    headerCell.textContent = cardName.toUpperCase();
+    headerRow.appendChild(headerCell);
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
     const hash = getHash();
-    
-    let cel = 1;
-    for ( let row = 0; row < NUM_ROWS; row++) {
-        codesCard += '<tr>';
-            for ( let col = 0; col < NUM_COLUMNS; col++) {
-                codesCard += '<td class="cel"><strong>'+cel+'</strong></td>';
-                const init = (cel-1)*4;
-                const subHash = hash.substr(init, 4);
-                codesCard += '<td>'+subHash+'</td>';
-                cel++;
-            }
-        codesCard += '</tr>';
+
+    const tbody = document.createElement('tbody');
+
+    let cell = 1;
+    for (let row = 0; row < NUM_ROWS; row++) {
+
+        const tr = document.createElement('tr');
+        
+        for (let col = 0; col < NUM_COLUMNS; col++) {
+
+            const th = document.createElement('th');
+            th.textContent = cell;
+            tr.appendChild(th);
+
+            const td = document.createElement('td');
+            const init = (cell - 1) * 4;
+            const subHash = hash.substr(init, 4);
+            td.textContent = subHash;
+            tr.appendChild(td);
+
+            cell++;
+        }
+
+        tbody.appendChild(tr);
     }
-    
-    codesCard += '</table>';
+    table.appendChild(tbody);
 
     const codesCardSeed = document.getElementById('codesCardSeed');
     codesCardSeed.style.display = 'none';
 
     const codesCardTable = document.getElementById('codesCardTable');
-    codesCardTable.innerHTML = codesCard;
     codesCardTable.style.display = 'block';
+    codesCardTable.appendChild(table);
+
     window.print();
-};
+}
