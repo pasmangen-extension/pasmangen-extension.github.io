@@ -57,8 +57,14 @@ function previousInput(passwordField) {
 
         if (element === passwordField) {
 
-            // Return the field of the previous input field, if it exists
-            return inputsFields[index - 1] ? inputsFields[index - 1] : null;
+            // Return the field of the previous input field, if it exists and is of type text
+            if (inputsFields[index - 1]) {
+                const input = inputsFields[index - 1];
+                console.log(input);
+                return input.type === 'text' ? input : null;
+            } else {
+                return null;
+            }
         }
     }
 
@@ -90,7 +96,7 @@ function initializePopover(passwordField) {
 
     const isIndex = passwordField ? false : true;
     const userNameField = previousInput(passwordField);
-    const popover = createPopover();
+    const popover = createPopover(passwordField);
     const closeButton = createCloseButton(popover, isIndex);
 
     addTitle(popover);
@@ -109,7 +115,7 @@ function initializePopover(passwordField) {
 
     addLink(popover, 'https://pasmangen-extension.github.io/help/', 'Help');
     const optionsContainer = createOptionsContainer(popover,
-        localStorage ? localStorage.optionsContainer : null);
+        localStorage ? localStorage.optionsContainer : false);
 
     addSeparationLine(optionsContainer);
 
@@ -167,7 +173,7 @@ function initializePopover(passwordField) {
             const closeObject = {
                 'domainInput': domainInput.value,
                 'userNameInput': userNameInput.value,
-                'optionsContainer': optionsContainer.dataset.opened,
+                'optionsContainer': optionsContainer.style.display === 'block' ? true: false,
                 'generatedPasswordLengthInput': generatedPasswordLengthInput.value,
                 'specialCheckBox': specialCheckBox.checked,
                 'numberCheckBox': numberCheckBox.checked,

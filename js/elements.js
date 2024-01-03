@@ -65,10 +65,10 @@ function addBR(parentElement) {
     parentElement.appendChild(document.createElement('br'));
 }
 
-function createPopover() {
+function createPopover(passwordField) {
 
     const popover = document.createElement('div');
-    popover.id = 'popover'
+    popover.id = 'popover' + (passwordField ? '-' + passwordField.id : '');
     popover.style.position = 'absolute';
     popover.style.backgroundColor = '#f9f9f9';
     popover.style.border = '1px solid #ccc';
@@ -135,15 +135,23 @@ function createInputNumber(parentElement, id, value) {
     return input;
 }
 
+function createButton(innerHTML) {
+
+    const button = document.createElement('button');
+    button.innerHTML = innerHTML;
+    button.style.cursor = 'pointer';
+
+    return button;
+}
+
 function createCloseButton(parentElement, isIndex) {
 
     if (isIndex) {
         return null;
     }
 
-    const closeButton = document.createElement('button');
-    closeButton.innerHTML = 'X';
-    closeButton.style.cursor = 'pointer';
+    const closeButton = createButton('X');
+    closeButton.name = 'Close';
     closeButton.style.float = 'right';
 
     parentElement.appendChild(closeButton);
@@ -154,12 +162,9 @@ function createCloseButton(parentElement, isIndex) {
 
 function createCopyButton(parentElement) {
 
-    const copyButton = document.createElement('button');
-    copyButton.innerHTML = '&#9112;';
-    copyButton.style.cursor = 'pointer';
+    const copyButton = createButton('&#9112;');
     copyButton.style.float = 'right';
     copyButton.style.marginTop = '1.8rem';
-    //copyButton.style.marginRight = '0.5rem';
 
     parentElement.appendChild(copyButton);
 
@@ -271,8 +276,7 @@ function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
 
 function createOptionsContainer(parentElement, opened) {
 
-    const optionsButton = document.createElement('button');
-    optionsButton.style.cursor = 'pointer';
+    const optionsButton = createButton('More options...');
     optionsButton.style.marginBottom = MARGIN;
 
     parentElement.appendChild(optionsButton);
@@ -283,11 +287,9 @@ function createOptionsContainer(parentElement, opened) {
     if (opened) {
         optionsButton.innerHTML = 'Less options...';
         optionsContainer.style.display = 'block';
-        optionsContainer.dataset.opened = true;
     } else {
         optionsButton.innerHTML = 'More options...';
         optionsContainer.style.display = 'none';
-        optionsContainer.dataset.opened = false;
     }
 
     parentElement.appendChild(optionsContainer);
@@ -296,11 +298,9 @@ function createOptionsContainer(parentElement, opened) {
         if (optionsContainer.style.display === 'block') {
             optionsButton.innerHTML = 'More options...';
             optionsContainer.style.display = 'none';
-            optionsContainer.dataset.opened = false;
         } else {
             optionsButton.innerHTML = 'Less options...';
             optionsContainer.style.display = 'block';
-            optionsContainer.dataset.opened = true;
         }
     });
 

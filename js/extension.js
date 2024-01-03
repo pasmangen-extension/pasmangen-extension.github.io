@@ -1,8 +1,8 @@
 function positionPopover(popover, passwordField) {
 
     const rect = passwordField.getBoundingClientRect();
-    popover.style.top = rect.top + window.scrollY + passwordField.offsetHeight + 10 + 'px';
-    popover.style.left = rect.left + 'px';
+    popover.style.top = rect.top + window.scrollY + passwordField.offsetHeight + 'px';
+    popover.style.left = rect.left + 20 + 'px';
 }
 
 function handleFocusOnPasswordField(event) {
@@ -11,7 +11,7 @@ function handleFocusOnPasswordField(event) {
 
     // Check if popover has already been created for this password field
     if (passwordField.dataset.popoverCreated) {
-        const popover = document.getElementById('popover');
+        const popover = document.getElementById('popover-' + passwordField.id);
         popover.style.display = 'block';
         return;
     }
