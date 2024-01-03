@@ -250,7 +250,10 @@ function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
     if (readOnly) {
         passwordInput.readOnly = true;
     } else {
-        if (!isMobileDevice()) {
+        if (isMobileDevice()) {
+            //passwordContainer.style.width = INPUT_WIDTH;
+            //passwordInput.style.width = INPUT_WIDTH;
+        } else {
             const styleElement = document.createElement('style');
             const styleContent = '.keyboardInputInitiator {' +
                 ' float: right;' +
