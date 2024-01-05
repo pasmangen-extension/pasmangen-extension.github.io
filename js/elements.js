@@ -167,10 +167,9 @@ function createInputNumber(parentElement, id, value) {
     return input;
 }
 
-function createButton(innerHTML) {
+function createButton() {
 
     const button = document.createElement('button');
-    button.innerHTML = innerHTML;
     button.style.setProperty('cursor', 'pointer', 'important');
     button.style.setProperty('background-color', '#ddd', 'important');
     button.style.setProperty('color', 'black', 'important');
@@ -185,7 +184,8 @@ function createCloseButton(parentElement, isIndex) {
         return null;
     }
 
-    const closeButton = createButton('X');
+    const closeButton = createButton();
+    closeButton.innerHTML = 'X';
     closeButton.name = 'Close';
     closeButton.style.setProperty('float', 'right', 'important');
 
@@ -197,7 +197,8 @@ function createCloseButton(parentElement, isIndex) {
 
 function createCopyButton(parentElement) {
 
-    const copyButton = createButton('&#9112;');
+    const copyButton = createButton();
+    copyButton.innerHTML = '&#9112;';
     copyButton.style.setProperty('float', 'right', 'important');
     copyButton.style.setProperty('margin-top', '1.8rem', 'important');
     copyButton.style.setProperty('margin-right', '1rem', 'important');
@@ -312,7 +313,7 @@ function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
 
 function createOptionsContainer(parentElement, opened) {
 
-    const optionsButton = createButton('More options...');
+    const optionsButton = createButton();
     optionsButton.style.setProperty('margin-bottom', MARGIN, 'important');
 
     parentElement.appendChild(optionsButton);
