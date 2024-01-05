@@ -60,9 +60,12 @@ function previousInput(passwordField) {
             // Return the field of the previous input field, if it exists and is of type text
             if (inputsFields[index - 1]) {
                 const input = inputsFields[index - 1];
-                return input.type === 'text' ? input : null;
-            } else {
-                return null;
+                if (input.type === 'text' || 
+                    input.type === 'email' ||
+                    input.type === 'tel' ||
+                    input.type === 'number') {
+                        return input;
+                }
             }
         }
     }
