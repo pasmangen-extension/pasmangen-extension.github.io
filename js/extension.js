@@ -1,27 +1,23 @@
 function positionPopover(popover, passwordField) {
 
     const rect = passwordField.getBoundingClientRect();
-    popover.style.top = rect.top + window.scrollY + passwordField.offsetHeight + 'px';
-    popover.style.left = rect.left + 20 + 'px';
+    popover.style.setProperty('top', rect.top + window.scrollY + passwordField.offsetHeight + 20 + 'px', 'important');
+    popover.style.setProperty('left', rect.left + 20 + 'px', 'important');
 }
 
 function handleFocusOnPasswordField(event) {
 
     const passwordField = event.target;
 
-    // Check if popover has already been created for this password field
-    if (passwordField.dataset.popoverCreated) {
-        const popover = document.getElementById('popover-' + passwordField.id);
-        popover.style.display = 'block';
-        return;
+    let popover = document.getElementById('popover-' + passwordField.id);
+
+    if (popover) {
+        popover.style.setProperty('display', 'block', 'important');
+    } else {
+        popover = initializePopover(passwordField);
+        positionPopover(popover, passwordField);
+        document.body.appendChild(popover);
     }
-
-    const popover = initializePopover(passwordField);
-    positionPopover(popover, passwordField);
-    document.body.appendChild(popover);
-
-    // Mark the password field to indicate that the popover has been created
-    passwordField.dataset.popoverCreated = true;
 }
 
 // Add event listener to all password fields on the page

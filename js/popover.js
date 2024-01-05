@@ -60,7 +60,6 @@ function previousInput(passwordField) {
             // Return the field of the previous input field, if it exists and is of type text
             if (inputsFields[index - 1]) {
                 const input = inputsFields[index - 1];
-                console.log(input);
                 return input.type === 'text' ? input : null;
             } else {
                 return null;
@@ -73,7 +72,7 @@ function previousInput(passwordField) {
 
 function closePopover(popover, closeObject) {
 
-    popover.style.display = 'none';
+    popover.style.setProperty('display', 'none', 'important');
 
     setObjectToLocalStorage(window.location.hostname, closeObject);
 }
