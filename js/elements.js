@@ -39,11 +39,14 @@ function addTitle(parentElement) {
     title.style.setProperty('font-size', '1.7rem', 'important');
 
     parentElement.appendChild(title);
+}
+
+function addSubTitle(parentElement) {
 
     const subtitle = document.createElement('h3');
     subtitle.innerHTML = 'Generate Password';
     subtitle.style.setProperty('text-align', 'center', 'important');
-    title.style.setProperty('font-size', '1.5rem', 'important');
+    subtitle.style.setProperty('font-size', '1.5rem', 'important');
 
     parentElement.appendChild(subtitle);
 }
@@ -76,13 +79,23 @@ function addBR(parentElement) {
 function createPopover(passwordField) {
 
     const popover = document.createElement('div');
-    popover.id = 'popover-' + (passwordField ? passwordField.id : '');
+    let id = 'pasmangen-';
+    const timestamp = new Date().getTime();
+    if (passwordField) {
+        if (!passwordField.id) {
+            passwordField.id = '' + timestamp;
+        }
+        id += '' + passwordField.id;
+    } else {
+        id += '' + timestamp;
+    }
+    popover.id = id;
     popover.style.setProperty('position', 'absolute', 'important');
     popover.style.setProperty('background-color', '#f9f9f9', 'important');
     popover.style.setProperty('border', BORDER, 'important');
     popover.style.setProperty('padding', '8px', 'important');
     popover.style.setProperty('border-radius', '10px', 'important');
-    popover.style.setProperty('z-index', '9999', 'important');
+    popover.style.setProperty('z-index', '99999', 'important');
     popover.style.setProperty('font-family', 'Roboto, sans-serif', 'important');
     popover.style.setProperty('cursor', 'move', 'important');
 

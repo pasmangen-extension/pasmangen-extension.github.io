@@ -102,6 +102,7 @@ function initializePopover(passwordField) {
     const closeButton = createCloseButton(popover, isIndex);
 
     addTitle(popover);
+    addSubTitle(popover);
 
     const localStorage = getObjectFromLocalStorage(window.location.hostname);
 
