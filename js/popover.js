@@ -60,11 +60,11 @@ function previousInput(passwordField) {
             // Return the field of the previous input field, if it exists and is of type text
             if (inputsFields[index - 1]) {
                 const input = inputsFields[index - 1];
-                if (input.type === 'text' || 
+                if (input.type === 'text' ||
                     input.type === 'email' ||
                     input.type === 'tel' ||
                     input.type === 'number') {
-                        return input;
+                    return input;
                 }
             }
         }
@@ -104,6 +104,8 @@ function initializePopover(passwordField) {
     addTitle(popover);
     addSubTitle(popover);
 
+    addLink(popover, 'https://pasmangen-extension.github.io/help/', 'Help');
+
     const localStorage = getObjectFromLocalStorage(window.location.hostname);
 
     const domainInput = createDomainInput(popover, isIndex,
@@ -112,11 +114,10 @@ function initializePopover(passwordField) {
         localStorage ? localStorage.userNameInput : null);
     const masterPasswordInput = createPasswordInput(popover,
         'masterPasswordInput', 'Master password', false, true);
-    const generatedPasswordCopyButton = createCopyButton(popover);
     const generatedPasswordInput = createPasswordInput(popover,
         'generatedPasswordInput', 'Generated password', true, true);
+    const generatedPasswordCopyButton = createCopyButton(popover);
 
-    addLink(popover, 'https://pasmangen-extension.github.io/help/', 'Help');
     const optionsContainer = createOptionsContainer(popover,
         localStorage ? localStorage.optionsContainer : false);
 
@@ -146,10 +147,11 @@ function initializePopover(passwordField) {
 
     const generatedUserNameCheckBox = createGeneratedUserNameChekBox(optionsContainer,
         localStorage ? localStorage.generatedUserNameCheckBox : null);
-    const generatedUserNameCopyButton = createCopyButton(optionsContainer);
     const generatedUserNameLengthInput = createGeneratedUserNameLengthInput(optionsContainer,
         localStorage ? localStorage.generatedUserNameLengthInput : null);
+    addBR(optionsContainer);
     const generatedUserNameInput = createGeneratedUserNameInput(optionsContainer);
+    const generatedUserNameCopyButton = createCopyButton(optionsContainer);
 
     const updateFieldsObject = {
         'userNameField': userNameField,
@@ -176,7 +178,7 @@ function initializePopover(passwordField) {
             const closeObject = {
                 'domainInput': domainInput.value,
                 'userNameInput': userNameInput.value,
-                'optionsContainer': optionsContainer.style.display === 'block' ? true: false,
+                'optionsContainer': optionsContainer.style.display === 'block' ? true : false,
                 'generatedPasswordLengthInput': generatedPasswordLengthInput.value,
                 'specialCheckBox': specialCheckBox.checked,
                 'numberCheckBox': numberCheckBox.checked,

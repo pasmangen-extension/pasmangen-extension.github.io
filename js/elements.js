@@ -3,7 +3,9 @@ const GENERATED_USERNAME_LENGTH = 32; // max 88
 const LABEL_WIDTH = '17.5rem';
 const INPUT_WIDTH = '28rem';
 const PASSWORD_INPUT_WIDTH = '24rem';
-const MARGIN = '0.5rem';
+const MARGIN = '0.1rem';
+const MARGIN_BOTTOM = '0.5rem';
+const PADDING = '0.5rem';
 const BORDER = '1px solid #aaa';
 const BORDER_RADIUS = '5px';
 
@@ -11,8 +13,11 @@ function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-function setBorder(element) {
+function setCommon(element) {
 
+    element.style.setProperty('padding', PADDING, 'important');
+    element.style.setProperty('margin', MARGIN, 'important');
+    element.style.setProperty('margin-bottom', MARGIN_BOTTOM, 'important');
     element.style.setProperty('border', BORDER, 'important');
     element.style.setProperty('border-radius', BORDER_RADIUS, 'important');
 }
@@ -36,7 +41,7 @@ function addTitle(parentElement) {
     const title = document.createElement('h2');
     title.innerHTML = 'Password Manager Generator';
     title.style.setProperty('text-align', 'center', 'important');
-    title.style.setProperty('font-size', '1.7rem', 'important');
+    title.style.setProperty('font-size', '1.5rem', 'important');
 
     parentElement.appendChild(title);
 }
@@ -46,7 +51,7 @@ function addSubTitle(parentElement) {
     const subtitle = document.createElement('h3');
     subtitle.innerHTML = 'Generate Password';
     subtitle.style.setProperty('text-align', 'center', 'important');
-    subtitle.style.setProperty('font-size', '1.5rem', 'important');
+    subtitle.style.setProperty('font-size', '1.3rem', 'important');
 
     parentElement.appendChild(subtitle);
 }
@@ -57,16 +62,20 @@ function addLink(parentElement, href, text) {
     link.href = href;
     link.text = text;
     link.style.setProperty('float', 'right', 'important');
+    link.style.setProperty('color', '#0d77d1', 'important');
+    link.style.setProperty('text-decoration-line', 'underline', 'important');
 
     parentElement.appendChild(link);
 }
 
 function addSeparationLine(parentElement) {
 
+    addBR(parentElement);
+
     const separationLine = document.createElement('hr');
     separationLine.style.setProperty('border', BORDER, 'important');
     separationLine.style.setProperty('width', INPUT_WIDTH, 'important');
-    separationLine.style.setProperty('margin-bottom', MARGIN, 'important');
+    separationLine.style.setProperty('margin-bottom', MARGIN_BOTTOM, 'important');
 
     parentElement.appendChild(separationLine);
 }
@@ -98,6 +107,7 @@ function createPopover(passwordField) {
     popover.style.setProperty('z-index', '99999', 'important');
     popover.style.setProperty('font-family', 'Roboto, sans-serif', 'important');
     popover.style.setProperty('cursor', 'move', 'important');
+    popover.style.setProperty('text-align', 'left', 'important');
 
     let offsetX = 0
     let offsetY = 0;
@@ -124,16 +134,23 @@ function createPopover(passwordField) {
 }
 
 
-function createLabel(parentElement, htmlFor, textContent) {
+function createLabel(parentElement, htmlFor, textContent, minWidth) {
+
+    addBR(parentElement);
 
     const label = document.createElement('Label');
     label.htmlFor = htmlFor;
     label.textContent = textContent;
     label.style.setProperty('font-weight', 'bold', 'important');
-    label.style.setProperty('min-width', LABEL_WIDTH, 'important');
     label.style.setProperty('display', 'inline-block', 'important');
     label.style.setProperty('cursor', 'pointer', 'important');
-    label.style.setProperty('margin-bottom', MARGIN, 'important');
+    label.style.setProperty('margin-bottom', MARGIN_BOTTOM, 'important');
+
+    if (minWidth) {
+        label.style.setProperty('min-width', minWidth, 'important');
+    } else {
+        label.style.setProperty('width', INPUT_WIDTH, 'important');
+    }
 
     parentElement.appendChild(label);
 
@@ -147,8 +164,8 @@ function createInputText(parentElement, id, placeholder, value, readOnly) {
     input.type = 'text';
     input.placeholder = placeholder;
     input.style.setProperty('width', INPUT_WIDTH, 'important');
-    input.style.setProperty('margin-bottom', MARGIN, 'important');
-    setBorder(input);
+    input.style.setProperty('margin-bottom', MARGIN_BOTTOM, 'important');
+    setCommon(input);
 
     if (value) {
         input.value = value;
@@ -159,7 +176,6 @@ function createInputText(parentElement, id, placeholder, value, readOnly) {
     }
 
     parentElement.appendChild(input);
-    addBR(parentElement);
 
     return input;
 }
@@ -170,12 +186,12 @@ function createInputNumber(parentElement, id, value) {
     input.id = id;
     input.type = 'number';
     input.value = value;
-    input.style.setProperty('width', '3rem', 'important');
-    input.style.setProperty('margin-bottom', MARGIN, 'important');
-    setBorder(input);
+    input.style.setProperty('width', '4rem', 'important');
+    input.style.setProperty('margin-bottom', MARGIN_BOTTOM, 'important');
+    input.style.setProperty('appearance', 'auto', 'important');
+    setCommon(input);
 
     parentElement.appendChild(input);
-    addBR(parentElement);
 
     return input;
 }
@@ -186,7 +202,7 @@ function createButton() {
     button.style.setProperty('cursor', 'pointer', 'important');
     button.style.setProperty('background-color', '#ddd', 'important');
     button.style.setProperty('color', 'black', 'important');
-    setBorder(button);
+    setCommon(button);
 
     return button;
 }
@@ -201,9 +217,10 @@ function createCloseButton(parentElement, isIndex) {
     closeButton.innerHTML = 'X';
     closeButton.name = 'Close';
     closeButton.style.setProperty('float', 'right', 'important');
+    closeButton.style.setProperty('widht', '2rem', 'important');
+    closeButton.style.setProperty('height', '2rem', 'important');
 
     parentElement.appendChild(closeButton);
-    addBR(parentElement);
 
     return closeButton;
 }
@@ -213,7 +230,7 @@ function createCopyButton(parentElement) {
     const copyButton = createButton();
     copyButton.innerHTML = '&#9112;';
     copyButton.style.setProperty('float', 'right', 'important');
-    copyButton.style.setProperty('margin-top', '1.8rem', 'important');
+    copyButton.style.setProperty('margin-top', '0rem', 'important');
     copyButton.style.setProperty('margin-right', '1rem', 'important');
 
     parentElement.appendChild(copyButton);
@@ -230,14 +247,13 @@ function createDomainInput(parentElement, isIndex, value) {
         return createInputText(parentElement, 'domainInput', 'Domain...');
     }
 
-    const domainInput = document.createElement('select');
-    domainInput.id = 'domainInput';
-    domainInput.style.setProperty('width', INPUT_WIDTH, 'important');
-    domainInput.style.setProperty('margin-bottom', MARGIN, 'important');
-    setBorder(domainInput);
+    const input = document.createElement('select');
+    input.id = 'domainInput';
+    input.style.setProperty('width', INPUT_WIDTH, 'important');
+    setCommon(input);
 
     if (value) {
-        domainInput.value = value;
+        input.value = value;
     }
 
     const parentDomainsChain = getParentDomainsChain();
@@ -245,13 +261,12 @@ function createDomainInput(parentElement, isIndex, value) {
         var option = document.createElement('option');
         option.value = parentDomainsChain[i];
         option.text = parentDomainsChain[i];
-        domainInput.appendChild(option);
+        input.appendChild(option);
     }
 
-    parentElement.appendChild(domainInput);
-    addBR(parentElement);
+    parentElement.appendChild(input);
 
-    return domainInput;
+    return input;
 }
 
 function createUserNameInput(parentElement, userNameField, value) {
@@ -277,60 +292,63 @@ function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
 
     const passwordContainer = document.createElement('div');
     passwordContainer.style.setProperty('position', 'relative', 'important');
+    passwordContainer.style.setProperty('display', 'inline-block', 'important');
     passwordContainer.style.setProperty('width', PASSWORD_INPUT_WIDTH, 'important');
 
-    const passwordInput = document.createElement('input');
-    passwordInput.id = id;
-    passwordInput.type = 'password';
-    passwordInput.placeholder = label + '...';
-    passwordInput.style.setProperty('width', PASSWORD_INPUT_WIDTH, 'important');
-    passwordInput.style.setProperty('margin-bottom', MARGIN, 'important');
-    setBorder(passwordInput);
-    passwordContainer.appendChild(passwordInput);
+    const input = document.createElement('input');
+    input.id = id;
+    input.type = 'password';
+    input.placeholder = label + '...';
+    input.style.setProperty('width', PASSWORD_INPUT_WIDTH, 'important');
+    setCommon(input);
+    passwordContainer.appendChild(input);
 
     const passwordToggle = document.createElement('span');
     passwordToggle.innerHTML = '&#128274;';
     passwordToggle.style.setProperty('position', 'absolute', 'important');
     passwordToggle.style.setProperty('right', '5px', 'important');
+    passwordToggle.style.setProperty('margin-top', MARGIN_BOTTOM, 'important');
     passwordToggle.style.setProperty('cursor', 'pointer', 'important');
     passwordToggle.addEventListener('click', function (event) {
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
+        if (input.type === 'password') {
+            input.type = 'text';
             passwordToggle.innerHTML = '&#128275;'; // Open lock icon
         } else {
-            passwordInput.type = 'password';
+            input.type = 'password';
             passwordToggle.innerHTML = '&#128274;'; // Closed lock icon
         }
     });
     passwordContainer.appendChild(passwordToggle);
 
     if (readOnly) {
-        passwordInput.readOnly = true;
+        input.readOnly = true;
     } else {
         if (!isMobileDevice()) {
             const styleElement = document.createElement('style');
             const styleContent = '.keyboardInputInitiator {' +
                 ' float: right !important;' +
-                ' margin-right: -3.5rem !important;' +
+                ' margin-right: -4rem !important;' +
+                ' margin-top: 0.5rem !important;' +
                 '}'
             styleElement.textContent = styleContent;
             document.head.appendChild(styleElement);
-            VKI_attach(passwordInput);
+            VKI_attach(input);
         }
     }
 
     parentElement.appendChild(passwordContainer);
 
-    return passwordInput;
+    return input;
 }
 
 function createOptionsContainer(parentElement, opened) {
 
+    addBR(parentElement);
+
     const optionsButton = createButton();
-    optionsButton.style.setProperty('margin-bottom', MARGIN, 'important');
+    optionsButton.style.setProperty('margin-bottom', MARGIN_BOTTOM, 'important');
 
     parentElement.appendChild(optionsButton);
-    addBR(parentElement);
 
     const optionsContainer = document.createElement('div');
 
@@ -359,29 +377,31 @@ function createOptionsContainer(parentElement, opened) {
 
 function createGeneratedPasswordLengthInput(parentElement, generatedPasswordLength) {
 
-    createLabel(parentElement, 'generatedPasswordLengthInput', 'Generated password length: ');
+    createLabel(parentElement, 'generatedPasswordLengthInput', 
+        'Generated password length: ', LABEL_WIDTH);
 
     if (!generatedPasswordLength) {
         generatedPasswordLength = GENERATED_PASSWORD_LENGTH;
     }
 
-    return createInputNumber(parentElement, 'generatedPasswordLengthInput', generatedPasswordLength);
+    return createInputNumber(parentElement, 'generatedPasswordLengthInput', 
+        generatedPasswordLength);
 }
 
 function createChekBox(parentElement, id, label, checked) {
 
-    createLabel(parentElement, id, label);
+    createLabel(parentElement, id, label, LABEL_WIDTH);
 
     const checkBox = document.createElement('input');
     checkBox.id = id;
     checkBox.type = 'CheckBox';
     checkBox.checked = checked;
-    checkBox.style.setProperty('margin-bottom', MARGIN, 'important');
     checkBox.style.setProperty('cursor', 'pointer', 'important');
-    setBorder(checkBox);
+    checkBox.style.setProperty('appearance', 'checkbox', 'important');
+    checkBox.style.setProperty('width', '1.5rem', 'important');
+    setCommon(checkBox);
 
     parentElement.appendChild(checkBox);
-    addBR(parentElement);
 
     return checkBox;
 }
@@ -397,8 +417,8 @@ function createPasswordChekBox(parentElement, checkBoxName, checked) {
 
 function createCodesCardLabel(parentElement, codesCardCellLabel) {
 
-    const label = createLabel(parentElement, 'codesCardInput', codesCardCellLabel + ':');
-    label.style.setProperty('min-width', '', 'important');
+    const label = createLabel(parentElement, 'codesCardInput', 
+        codesCardCellLabel + ':', LABEL_WIDTH);
     return label;
 }
 
@@ -414,7 +434,8 @@ function createGeneratedUserNameChekBox(parentElement, checked) {
 
 function createGeneratedUserNameLengthInput(parentElement, generatedUserNameLength) {
 
-    createLabel(parentElement, 'generatedUserNameLengthInput', 'Generated user name length: ');
+    createLabel(parentElement, 'generatedUserNameLengthInput', 
+        'Generated user name length: ', LABEL_WIDTH);
 
     if (!generatedUserNameLength) {
         generatedUserNameLength = GENERATED_USERNAME_LENGTH;
