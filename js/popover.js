@@ -1,4 +1,6 @@
-function updateFields(updateFieldsObject) {
+function updateFields(updateFieldsObject, dataObject) {
+
+    saveData(dataObject);
 
     const passwordSeed = {
         'domainSeed': updateFieldsObject.domainInput.value,
@@ -6,7 +8,8 @@ function updateFields(updateFieldsObject) {
         'masterPasswordSeed': updateFieldsObject.masterPasswordInput.value,
         'codesCardSeed': updateFieldsObject.codesCardInput.value,
         'passwordLength': updateFieldsObject.generatedPasswordLengthInput.value,
-        'hasOthers': updateFieldsObject.specialCheckBox.checked,
+        'specialCharacters': updateFieldsObject.specialCharactersInput.value,
+        'hasSpecial': updateFieldsObject.specialCheckBox.checked,
         'hasNumber': updateFieldsObject.numberCheckBox.checked,
         'hasUpper': updateFieldsObject.upperCheckBox.checked,
         'hasLower': updateFieldsObject.lowerCheckBox.checked
@@ -73,11 +76,23 @@ function previousInput(passwordField) {
     return null;
 }
 
-function closePopover(popover, closeObject) {
+function saveData(dataObject) {
 
-    popover.style.setProperty('display', 'none', 'important');
+    const saveObject = {
+        'domainInput': dataObject.domainInput.value,
+        'userNameInput': dataObject.userNameInput.value,
+        'optionsContainer': dataObject.optionsContainer.style.display === 'block' ? true : false,
+        'generatedPasswordLengthInput': dataObject.generatedPasswordLengthInput.value,
+        'specialCharactersInput': dataObject.specialCharactersInput.value,
+        'specialCheckBox': dataObject.specialCheckBox.checked,
+        'numberCheckBox': dataObject.numberCheckBox.checked,
+        'upperCheckBox': dataObject.upperCheckBox.checked,
+        'lowerCheckBox': dataObject.lowerCheckBox.checked,
+        'generatedUserNameCheckBox': dataObject.generatedUserNameCheckBox.checked,
+        'generatedUserNameLengthInput': dataObject.generatedUserNameLengthInput.value,
+    };
 
-    setObjectToLocalStorage(window.location.hostname, closeObject);
+    setObjectToLocalStorage(window.location.hostname, saveObject);
 }
 
 function copyText(textToCopy) {
@@ -129,10 +144,13 @@ function initializePopover(passwordField) {
         localStorage ? localStorage.upperCheckBox : null);
     const lowerCheckBox = createPasswordChekBox(optionsContainer, 'Lowercase',
         localStorage ? localStorage.lowerCheckBox : null);
-    const specialCheckBox = createPasswordChekBox(optionsContainer, 'Special',
-        localStorage ? localStorage.specialCheckBox : null);
     const numberCheckBox = createPasswordChekBox(optionsContainer, 'Number',
         localStorage ? localStorage.numberCheckBox : null);
+    const specialCheckBox = createPasswordChekBox(optionsContainer, 'Special',
+        localStorage ? localStorage.specialCheckBox : null);
+    const specialCharactersInput = createSpecialCharactersInput(optionsContainer,
+        localStorage ? localStorage.specialCharactersInput : null);
+    addBR(optionsContainer);
 
     addSeparationLine(optionsContainer);
 
@@ -142,6 +160,7 @@ function initializePopover(passwordField) {
     addBR(optionsContainer);
     const codesCardInput = createPasswordInput(optionsContainer,
         'codesCardInput', codesCardCellLabel, false, false);
+    addBR(optionsContainer);
 
     addSeparationLine(optionsContainer);
 
@@ -161,6 +180,7 @@ function initializePopover(passwordField) {
         'masterPasswordInput': masterPasswordInput,
         'generatedPasswordInput': generatedPasswordInput,
         'generatedPasswordLengthInput': generatedPasswordLengthInput,
+        'specialCharactersInput': specialCharactersInput,
         'specialCheckBox': specialCheckBox,
         'numberCheckBox': numberCheckBox,
         'upperCheckBox': upperCheckBox,
@@ -172,23 +192,24 @@ function initializePopover(passwordField) {
         'generatedUserNameInput': generatedUserNameInput,
     };
 
+    const dataObject = {
+        'domainInput': domainInput,
+        'userNameInput': userNameInput,
+        'optionsContainer': optionsContainer,
+        'generatedPasswordLengthInput': generatedPasswordLengthInput,
+        'specialCharactersInput': specialCharactersInput,
+        'specialCheckBox': specialCheckBox,
+        'numberCheckBox': numberCheckBox,
+        'upperCheckBox': upperCheckBox,
+        'lowerCheckBox': lowerCheckBox,
+        'generatedUserNameCheckBox': generatedUserNameCheckBox,
+        'generatedUserNameLengthInput': generatedUserNameLengthInput,
+    };
+
     if (closeButton) {
         closeButton.addEventListener('click', function () {
-
-            const closeObject = {
-                'domainInput': domainInput.value,
-                'userNameInput': userNameInput.value,
-                'optionsContainer': optionsContainer.style.display === 'block' ? true : false,
-                'generatedPasswordLengthInput': generatedPasswordLengthInput.value,
-                'specialCheckBox': specialCheckBox.checked,
-                'numberCheckBox': numberCheckBox.checked,
-                'upperCheckBox': upperCheckBox.checked,
-                'lowerCheckBox': lowerCheckBox.checked,
-                'generatedUserNameCheckBox': generatedUserNameCheckBox.checked,
-                'generatedUserNameLengthInput': generatedUserNameLengthInput.value,
-            };
-
-            closePopover(popover, closeObject)
+            saveData(dataObject);
+            popover.style.setProperty('display', 'none', 'important');
         });
     }
 
@@ -203,41 +224,45 @@ function initializePopover(passwordField) {
     if (userNameField) {
         userNameField.addEventListener('input', function (event) {
             userNameInput.value = userNameField.value;
+            updateFields(updateFieldsObject, dataObject);
         });
     }
 
     domainInput.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     userNameInput.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     masterPasswordInput.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     generatedPasswordLengthInput.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
+    });
+    specialCharactersInput.addEventListener('input', function (event) {
+        updateFields(updateFieldsObject, dataObject);
     });
     specialCheckBox.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     numberCheckBox.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     lowerCheckBox.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     upperCheckBox.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     codesCardInput.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     generatedUserNameCheckBox.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
     generatedUserNameLengthInput.addEventListener('input', function (event) {
-        updateFields(updateFieldsObject);
+        updateFields(updateFieldsObject, dataObject);
     });
 
     return popover;

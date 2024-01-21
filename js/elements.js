@@ -1,8 +1,10 @@
-const GENERATED_PASSWORD_LENGTH = 32; // max 88
-const GENERATED_USERNAME_LENGTH = 32; // max 88
+const DEFAULT_SPECIAL_CHARACTERS = '_-#$&¿?¡!@';
+const GENERATED_PASSWORD_LENGTH = 15; // max 88
+const GENERATED_USERNAME_LENGTH = 30; // max 88
 const LABEL_WIDTH = '17.5rem';
-const INPUT_WIDTH = '28rem';
-const PASSWORD_INPUT_WIDTH = '24rem';
+const INPUT_WIDTH = '30rem';
+const PASSWORD_INPUT_WIDTH = '26rem';
+const SPECIAL_INPUT_WIDTH = '10rem';
 const MARGIN = '0.1rem';
 const MARGIN_BOTTOM = '0.5rem';
 const PADDING = '0.5rem';
@@ -25,11 +27,11 @@ function setCommon(element) {
 function getParentDomainsChain() {
 
     const domain = window.location.hostname;
-    var subdomains = domain.split('.');
-    var parentDomains = [domain];
+    const subdomains = domain.split('.');
+    const parentDomains = [domain];
 
-    for (var i = 1; i < subdomains.length; i++) {
-        var parentDomain = subdomains.slice(i).join('.');
+    for (let i = 1; i < subdomains.length; i++) {
+        let parentDomain = subdomains.slice(i).join('.');
         parentDomains.push(parentDomain);
     }
 
@@ -82,7 +84,8 @@ function addSeparationLine(parentElement) {
 
 function addBR(parentElement) {
 
-    parentElement.appendChild(document.createElement('br'));
+    const br = document.createElement('br');
+    parentElement.appendChild(br);
 }
 
 function createPopover(passwordField) {
@@ -133,7 +136,6 @@ function createPopover(passwordField) {
     return popover;
 }
 
-
 function createLabel(parentElement, htmlFor, textContent, minWidth) {
 
     addBR(parentElement);
@@ -163,9 +165,9 @@ function createInputText(parentElement, id, placeholder, value, readOnly) {
     input.id = id;
     input.type = 'text';
     input.placeholder = placeholder;
+    setCommon(input);
     input.style.setProperty('width', INPUT_WIDTH, 'important');
     input.style.setProperty('margin-bottom', MARGIN_BOTTOM, 'important');
-    setCommon(input);
 
     if (value) {
         input.value = value;
@@ -186,10 +188,10 @@ function createInputNumber(parentElement, id, value) {
     input.id = id;
     input.type = 'number';
     input.value = value;
+    setCommon(input);
     input.style.setProperty('width', '4rem', 'important');
     input.style.setProperty('margin-bottom', MARGIN_BOTTOM, 'important');
     input.style.setProperty('appearance', 'auto', 'important');
-    setCommon(input);
 
     parentElement.appendChild(input);
 
@@ -199,10 +201,10 @@ function createInputNumber(parentElement, id, value) {
 function createButton() {
 
     const button = document.createElement('button');
+    setCommon(button);
     button.style.setProperty('cursor', 'pointer', 'important');
     button.style.setProperty('background-color', '#ddd', 'important');
     button.style.setProperty('color', 'black', 'important');
-    setCommon(button);
 
     return button;
 }
@@ -231,7 +233,7 @@ function createCopyButton(parentElement) {
     copyButton.innerHTML = '&#9112;';
     copyButton.style.setProperty('float', 'right', 'important');
     copyButton.style.setProperty('margin-top', '0rem', 'important');
-    copyButton.style.setProperty('margin-right', '1rem', 'important');
+    copyButton.style.setProperty('margin-right', '1.6rem', 'important');
 
     parentElement.appendChild(copyButton);
 
@@ -249,16 +251,16 @@ function createDomainInput(parentElement, isIndex, value) {
 
     const input = document.createElement('select');
     input.id = 'domainInput';
-    input.style.setProperty('width', INPUT_WIDTH, 'important');
     setCommon(input);
+    input.style.setProperty('width', INPUT_WIDTH, 'important');
 
     if (value) {
         input.value = value;
     }
 
     const parentDomainsChain = getParentDomainsChain();
-    for (var i = 0; i < parentDomainsChain.length; i++) {
-        var option = document.createElement('option');
+    for (let i = 0; i < parentDomainsChain.length; i++) {
+        const option = document.createElement('option');
         option.value = parentDomainsChain[i];
         option.text = parentDomainsChain[i];
         input.appendChild(option);
@@ -283,6 +285,18 @@ function createUserNameInput(parentElement, userNameField, value) {
     return createInputText(parentElement, 'userNameInput', 'User name...', userName);
 }
 
+function createSpecialCharactersInput(parentElement, value) {
+
+    if (!value) {
+        value = DEFAULT_SPECIAL_CHARACTERS;
+    }
+
+    const input = createInputText(parentElement, 'specialCharactersInput', 'Special characters...', value);
+    input.style.setProperty('width', SPECIAL_INPUT_WIDTH, 'important');
+
+    return input;
+}
+
 function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
 
     if (needLabel) {
@@ -299,14 +313,14 @@ function createPasswordInput(parentElement, id, label, readOnly, needLabel) {
     input.id = id;
     input.type = 'password';
     input.placeholder = label + '...';
-    input.style.setProperty('width', PASSWORD_INPUT_WIDTH, 'important');
     setCommon(input);
+    input.style.setProperty('width', PASSWORD_INPUT_WIDTH, 'important');
     passwordContainer.appendChild(input);
 
     const passwordToggle = document.createElement('span');
     passwordToggle.innerHTML = '&#128274;';
     passwordToggle.style.setProperty('position', 'absolute', 'important');
-    passwordToggle.style.setProperty('right', '5px', 'important');
+    passwordToggle.style.setProperty('right', '0.5rem', 'important');
     passwordToggle.style.setProperty('margin-top', MARGIN_BOTTOM, 'important');
     passwordToggle.style.setProperty('cursor', 'pointer', 'important');
     passwordToggle.addEventListener('click', function (event) {
@@ -392,18 +406,19 @@ function createChekBox(parentElement, id, label, checked) {
 
     createLabel(parentElement, id, label, LABEL_WIDTH);
 
-    const checkBox = document.createElement('input');
-    checkBox.id = id;
-    checkBox.type = 'CheckBox';
-    checkBox.checked = checked;
-    checkBox.style.setProperty('cursor', 'pointer', 'important');
-    checkBox.style.setProperty('appearance', 'checkbox', 'important');
-    checkBox.style.setProperty('width', '1.5rem', 'important');
-    setCommon(checkBox);
+    const input = document.createElement('input');
+    input.id = id;
+    input.type = 'CheckBox';
+    input.checked = checked;
+    setCommon(input);
+    input.style.setProperty('cursor', 'pointer', 'important');
+    input.style.setProperty('appearance', 'checkbox', 'important');
+    input.style.setProperty('width', '1.5rem', 'important');
+    input.style.setProperty('margin-top', '1rem', 'important');
 
-    parentElement.appendChild(checkBox);
+    parentElement.appendChild(input);
 
-    return checkBox;
+    return input;
 }
 
 function createPasswordChekBox(parentElement, checkBoxName, checked) {

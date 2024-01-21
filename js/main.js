@@ -18,89 +18,121 @@ function generatePasswordFromSeeds(passwordSeed) {
     return normalizePassword(hash, passwordSeed);
 }
 
+function replaceSpecialCharacters(password, specialCharacters) {
+
+    let i = 0;
+    const alphabet = specialCharacters;
+    return password.replace(/[^a-zA-Z0-9]/g, function () {
+        if (i >= alphabet.length) {
+            i = 0;
+        }
+        return alphabet.charAt(i++);
+    });
+}
+
+function removeSpecialCharacters(password) {
+
+    let i = 0;
+    const alphabet = 'aA0bB1cC2dD3eE4fF5gG6hH7iI8jJ9kKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ';
+    return password.replace(/[^a-zA-Z0-9]/g, function () {
+        if (i >= alphabet.length) {
+            i = 0;
+        }
+        return alphabet.charAt(i++);
+    });
+}
+
+function removeNumbers(password) {
+
+    let i = 0;
+    const alphabet = 'aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ';
+    return password.replace(/[0-9]/g, function () {
+        if (i >= alphabet.length) {
+            i = 0;
+        }
+        return alphabet.charAt(i++);
+    });
+}
+
+function removeLetters(password) {
+
+    let i = 0;
+    return password.replace(/[a-zA-Z]/g, function () {
+        return '' + (i++);
+    });
+}
+
+function removeNumbersAndLetters(password, specialCharacters) {
+
+    let i = 0;
+    const alphabet = specialCharacters;
+    return password.replace(/[a-zA-Z0-9]/g, function () {
+        if (i >= alphabet.length) {
+            i = 0;
+        }
+        return alphabet.charAt(i++);
+    });
+}
+
 function normalizePassword(password, passwordSeed) {
 
-    passwordLength = passwordSeed.passwordLength;
-    hasOthers = passwordSeed.hasOthers;
-    hasNumber = passwordSeed.hasNumber;
-    hasUpper = passwordSeed.hasUpper;
-    hasLower = passwordSeed.hasLower;
+    const passwordLength = passwordSeed.passwordLength;
+    const specialCharacters = passwordSeed.specialCharacters;
 
-    var newPassword = password.slice(0, passwordLength);
+    const hasSpecial = passwordSeed.hasSpecial;
+    const hasNumber = passwordSeed.hasNumber;
+    const hasUpper = passwordSeed.hasUpper;
+    const hasLower = passwordSeed.hasLower;
 
     const normal = /^[a-zA-Z0-9]+$/;
     const number = /[0-9]/;
     const upper = /[A-Z]/;
     const lower = /[a-z]/;
 
-    var append = ''
+    let newPassword = replaceSpecialCharacters(password, specialCharacters);  
 
-    if ((!hasOthers) && (!hasNumber) && (!hasUpper) && (!hasLower)) {
-        return newPassword;
-    }
+    const testPassword = newPassword.slice(0, passwordLength - 4);
 
-    if (hasOthers) {
-        if (normal.test(newPassword)) {
-            append = append + '.';
+    if (hasSpecial) {
+        if (normal.test(testPassword)) {
+            newPassword = specialCharacters.charAt(0) + newPassword;
         }
     } else {
-        var i = 0;
-        var alphabet = 'aA0bB1cC2dD3eE4fF5gG6hH7iI8jJ9kKlLmMnNoOpPqQrRsStT';
-        newPassword = newPassword.replace(/[^a-zA-Z0-9]/g, function () {
-            return alphabet.charAt(i++);
-        });
+        newPassword = removeSpecialCharacters(newPassword);
+    }
+
+    if ((!hasLower) && (!hasUpper)) {
+        if (hasNumber) {
+            newPassword = removeLetters(newPassword);
+        }
+        return newPassword.slice(0, passwordLength);
     }
 
     if (hasNumber) {
-        if (!number.test(newPassword)) {
-            append = append + '0';
+        if (!number.test(testPassword)) {
+            newPassword = '0' + newPassword;
         }
     } else {
-        var i = 0;
-        var alphabet = 'aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStT';
-        newPassword = newPassword.replace(/[0-9]/g, function () {
-            return alphabet.charAt(i++);
-        });
-    }
-
-    if (hasUpper) {
-        if (!upper.test(newPassword)) {
-            append = append + 'M';
-        }
-    } else {
-        newPassword = newPassword.toLowerCase();
+        newPassword = removeNumbers(newPassword);
     }
 
     if (hasLower) {
         if (!lower.test(newPassword)) {
-            append = append + 'p';
+            newPassword = 'm' + newPassword;
         }
     } else {
         newPassword = newPassword.toUpperCase();
     }
 
-    if ((!hasLower) && (!hasUpper)) {
-        var i = 0;
-        var alphabet = '091827364509182736450918273645';
-        newPassword = newPassword.replace(/[a-zA-Z]/g, function () {
-            return alphabet.charAt(i++);
-        });
+    if (hasUpper) {
+        if (!upper.test(newPassword)) {
+            newPassword = 'P' + newPassword;
+        }
+    } else {
+        newPassword = newPassword.toLowerCase();
     }
 
-    if ((!hasLower) && (!hasUpper) && (!hasNumber)) {
-        var i = 0;
-        var alphabet = '!@#$%-_+=\|;:,.!@#$%-_+=\|;:,.';
-        newPassword = newPassword.replace(/[a-zA-Z0-9]/g, function () {
-            return alphabet.charAt(i++);
-        });
-    }
-
-    if (append) {
-        newPassword = append + newPassword;
-        return newPassword.slice(0, passwordLength);
-    }
-
-    return newPassword;
+    return newPassword.slice(0, passwordLength);
 }
 
 function generateCodesCardCell(domain, userName) {
@@ -108,7 +140,7 @@ function generateCodesCardCell(domain, userName) {
     const text = '' + domain.toLowerCase() + userName.toLowerCase();
 
     let sumCharCode = 0;
-    for (var i = 0; i < text.length; i++) {
+    for (let i = 0; i < text.length; i++) {
         sumCharCode += text.charCodeAt(i);
     }
     return sumCharCode % NUMBER_CODES_CARD_CELLS;
@@ -143,7 +175,7 @@ function normalizeUserName(hash, generatedUserNameLength) {
 
 function getObjectFromLocalStorage(objectName) {
 
-    var object = localStorage.getItem(objectName);
+    let object = localStorage.getItem(objectName);
     if (object) {
         object = JSON.parse(object);
     }
